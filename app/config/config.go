@@ -1,13 +1,24 @@
 package config
 
 import (
+	"time"
+
 	"github.com/Danangoffic/go-merce/app/database"
+	"github.com/Danangoffic/go-merce/app/routes"
+	"github.com/gin-contrib/cors"
+	limits "github.com/gin-contrib/size"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-func InitDB() *gorm.DB {
+func InitAPP() (*gorm.DB, *gin.Engine) {
+	routeMapper := routes.RouterStruct{GE: setupRouter(), DB: initDB()}
+	routes.LoadRouters(routeMapper)
+	return routeMapper.DB, routeMapper.GE
+}
+
+func initDB() *gorm.DB {
 	// Membuat koneksi ke database
 	db, err := setupDatabase()
 	if err != nil {
@@ -27,8 +38,16 @@ func setupDatabase() (*gorm.DB, error) {
 	return db, nil
 }
 
-func SetupRouter() *gin.Engine {
+func setupRouter() *gin.Engine {
 	router := gin.Default()
-
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"POST", "GET"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+	router.Use(limits.RequestSizeLimiter(60))
 	return router
 }

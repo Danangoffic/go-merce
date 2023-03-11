@@ -1,18 +1,12 @@
 package main
 
-import (
-	"github.com/Danangoffic/go-merce/app/config"
-	"github.com/Danangoffic/go-merce/app/routes"
-)
+import "github.com/Danangoffic/go-merce/app/config"
 
 func main() {
-	db := config.InitDB()
+	db, router := config.InitAPP()
 	if db.Error != nil {
 		panic("Db failed to load caused : " + db.Error.Error())
 	}
-
-	router := config.SetupRouter()
-	routes.LoadRouters(router, db)
 
 	router.Run(":8000")
 }

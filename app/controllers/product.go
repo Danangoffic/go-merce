@@ -5,35 +5,34 @@ import (
 	"strconv"
 
 	"github.com/Danangoffic/go-merce/app/models"
+	"github.com/Danangoffic/go-merce/app/services/product"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 type ProductController struct {
-	db *gorm.DB
+	db             *gorm.DB
+	serviceProduct product.Services
 }
 
 // To init ProductController Class, pass the *gorm.DB interface
-func NewProductController(db *gorm.DB) *ProductController {
-	return &ProductController{db: db}
+func NewProductController(db *gorm.DB, serviceProduct product.Services) *ProductController {
+	return &ProductController{db: db, serviceProduct: serviceProduct}
 }
 
 func (pc *ProductController) GetProducts(c *gin.Context) {
 	var products []models.Product
 
 	// Query semua produk
-	if result := pc.db.Find(&products); result.Error != nil {
-		c.JSON(http.StatusInternalServerError,
-			gin.H{"status": http.StatusInternalServerError, "message": "Failed to get Products data", "data": nil})
+	category, _ := c.GetQuery("category")
+	products, err := pc.serviceProduct.GetProducts(category)
+	if err != nil {
+		c.JSON(http.StatusNotFound,
+			gin.H{"status": http.StatusNotFound, "message": err.Error(), "data": nil})
 		return
 	}
 
 	// Jika tidak ada produk yang ditemukan
-	if len(products) == 0 {
-		c.JSON(http.StatusNotFound,
-			gin.H{"status": http.StatusNotFound, "message": "No products found", "data": nil})
-		return
-	}
 
 	// Return produk sebagai response JSON
 	c.JSON(http.StatusOK,
