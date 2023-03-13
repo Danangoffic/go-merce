@@ -1,6 +1,7 @@
 package config
 
 import (
+	"strings"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -16,9 +17,9 @@ func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"POST", "GET"},
-		AllowHeaders:     []string{"Origin"},
-		ExposeHeaders:    []string{"Content-Length"},
+		AllowMethods:     strings.Split(AllowMethods, ","),
+		AllowHeaders:     strings.Split(AllowHeaders, ","),
+		ExposeHeaders:    strings.Split(ExposeHeaders, ","),
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
