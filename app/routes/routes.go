@@ -2,8 +2,8 @@ package routes
 
 import (
 	"github.com/Danangoffic/go-merce/app/controllers"
-	repoProduct "github.com/Danangoffic/go-merce/app/repositories/product"
-	"github.com/Danangoffic/go-merce/app/services/product"
+	Repositories "github.com/Danangoffic/go-merce/app/repositories"
+	ServiceApp "github.com/Danangoffic/go-merce/app/services"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -15,18 +15,25 @@ type RouterStruct struct {
 
 func LoadRouters(mapper RouterStruct) {
 	repos := populateRepository(mapper.DB)
-	productService := product.InitService(repos.productRepo)
-	pc := controllers.NewProductController(mapper.DB, productService)
+	// userService :=
+	service := ServiceApp.InitService(repos.productRepo)
+	pc := controllers.NewProductController(mapper.DB, service)
+	userControler := controllers.NewUserController(mapper.DB, service)
 
+	//
 	productRoutes := mapper.GE.Group("/products")
 	productRoutes.GET("", pc.GetProducts)
+	productRoutes.POST("", pc.CreateProduct)
+
+	userRoutes := mapper.GE.Group("/users")
+	userRoutes.GET("", userControler.GetUserByID)
 }
 
 type RepositoryList struct {
-	productRepo repoProduct.Repository
+	productRepo Repositories.Repository
 }
 
 func populateRepository(db *gorm.DB) RepositoryList {
-	productRepo := repoProduct.GetRepository(db)
+	productRepo := Repositories.GetRepository(db)
 	return RepositoryList{productRepo: productRepo}
 }
