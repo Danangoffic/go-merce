@@ -8,17 +8,15 @@ import (
 	"github.com/Danangoffic/go-merce/app/helpers"
 	"github.com/Danangoffic/go-merce/app/services"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type UserController struct {
-	db      *gorm.DB
 	Service services.Services
 }
 
 // To init UserController Class, pass the *gorm.DB interface
-func NewUserController(db *gorm.DB, Service services.Services) *UserController {
-	return &UserController{db: db, Service: Service}
+func NewUserController(Service services.Services) *UserController {
+	return &UserController{Service: Service}
 }
 
 func (u *UserController) GetUserByID(c *gin.Context) {
