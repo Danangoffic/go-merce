@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"github.com/Danangoffic/go-merce/app/controllers"
 	Repositories "github.com/Danangoffic/go-merce/app/repositories"
 	ServiceApp "github.com/Danangoffic/go-merce/app/services"
 	"github.com/gin-gonic/gin"
@@ -19,16 +18,7 @@ func LoadRouters(mapper RouterStruct) {
 	populateRepos := populateRepository(mapper.DB)
 	// userService :=
 	service := ServiceApp.InitService(populateRepos.repos)
-	pc := controllers.NewProductController(service)
-	userControler := controllers.NewUserController(service)
-
-	//
-	productRoutes := mapper.GE.Group("/products")
-	productRoutes.GET("", pc.GetProducts)
-	productRoutes.POST("", pc.CreateProduct)
-
-	userRoutes := mapper.GE.Group("/users")
-	userRoutes.GET("", userControler.GetUserByID)
+	LoadAPI(mapper, service)
 }
 
 type RepositoryList struct {
@@ -39,4 +29,8 @@ type RepositoryList struct {
 func populateRepository(db *gorm.DB) RepositoryList {
 	repos := Repositories.GetRepository(db)
 	return RepositoryList{repos: repos}
+}
+
+func LoadWEB(mapper RouterStruct, service ServiceApp.Services) {
+	// Load the Web APP Routes here
 }
