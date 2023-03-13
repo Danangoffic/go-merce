@@ -9,18 +9,17 @@ import (
 	"github.com/Danangoffic/go-merce/app/helpers"
 	"github.com/Danangoffic/go-merce/app/models"
 	"github.com/Danangoffic/go-merce/app/services"
+	"github.com/Danangoffic/go-merce/app/utils/Messages"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type ProductController struct {
-	db      *gorm.DB
 	Service services.Services
 }
 
 // To init ProductController Class, pass the *gorm.DB interface
-func NewProductController(db *gorm.DB, Service services.Services) *ProductController {
-	return &ProductController{db: db, Service: Service}
+func NewProductController(Service services.Services) *ProductController {
+	return &ProductController{Service: Service}
 }
 
 func (pc *ProductController) GetProducts(c *gin.Context) {
@@ -56,17 +55,16 @@ func (pc *ProductController) GetProductByID(c *gin.Context) {
 		return
 	}
 
-	var product models.Product
-
 	// Query produk dengan ID yang sesuai
-	if result := pc.db.First(&product, id); result.Error != nil {
+	result, err := pc.Service.GetProductByID(id)
+	if err != nil {
 		response := helpers.ResponseJSON("Product not found", http.StatusNotFound, nil, errors.New("Product not found"))
 		c.JSON(http.StatusNotFound, response)
 		return
 	}
 
 	// Return produk dengan ID tersebut sebagai response JSON
-	response := helpers.ResponseJSON("success", http.StatusOK, product, nil)
+	response := helpers.ResponseJSON(Messages.Success, http.StatusOK, result, nil)
 	c.JSON(http.StatusOK, response)
 	return
 }
