@@ -32,3 +32,11 @@ func (r *RepositoryApp) CreateProduct(product models.Product) (models.Product, e
 	}
 	return product, nil
 }
+
+func (r *RepositoryApp) GetProductByID(ID int) (models.Product, error) {
+	var product models.Product
+	if err := r.db.Where(models.Product{ID: uint(ID)}).Find(&product).Error; err != nil {
+		return product, err
+	}
+	return product, nil
+}
