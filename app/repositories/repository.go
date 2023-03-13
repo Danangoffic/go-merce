@@ -26,4 +26,7 @@ type Repository interface {
 	// User Interfaces
 	GetUserByID(user models.User) (models.User, error)
 	CreateUser(user models.User) (models.User, error)
+
+	// User Token Interfaces
+	GetUserTokenData(token string) (models.User, error)
 }

@@ -6,5 +6,6 @@ import "gorm.io/gorm"
 func DoMigration(db *gorm.DB) {
 	// table migration here
 	UserMigration(db)
+	UserTokenMigration(db)
 	ProductMigration(db)
 }

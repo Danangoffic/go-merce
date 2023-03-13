@@ -81,8 +81,8 @@ func (pc *ProductController) CreateProduct(c *gin.Context) {
 		return
 	}
 
-	// Set nilai createdBy dengan user yang sedang login
-	user := c.MustGet("createdById")
+	// Set nilai createdBy dengan user yang sedang login pada parameters
+	user := c.MustGet("user")
 	currentUser := user.(*models.User)
 	createdBy := models.User{ID: currentUser.ID}
 	requestProduct.CreatedByID = strconv.Itoa(int(currentUser.ID))

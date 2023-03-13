@@ -9,3 +9,11 @@ func (s *service) GetUserByID(ID uint) (models.User, error) {
 	}
 	return user, nil
 }
+
+func (s *service) GetUserTokenData(token string) (models.User, error) {
+	user, err := s.repositories.GetUserTokenData(token)
+	if err != nil {
+		return user, err
+	}
+	return user, nil
+}

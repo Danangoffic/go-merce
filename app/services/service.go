@@ -17,6 +17,9 @@ func InitService(repository repositories.Repository) *service {
 type Services interface {
 	GetProducts(cateogry string) ([]models.Product, error)
 	GetProductByID(ID int) (models.Product, error)
-	GetUserByID(ID uint) (models.User, error)
 	CreateProduct(input request.StoreProduct) (models.Product, error)
+
+	GetUserByID(ID uint) (models.User, error)
+
+	GetUserTokenData(token string) (models.User, error)
 }
