@@ -1,7 +1,11 @@
 package database
 
-import "gorm.io/gorm"
+import (
+	"github.com/Danangoffic/go-merce/app/database/migrations"
+	"gorm.io/gorm"
+)
 
+// Run the database migration
 func Migrate(db *gorm.DB) {
-
+	go migrations.DoMigration(db)
 }
