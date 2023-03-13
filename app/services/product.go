@@ -10,6 +10,14 @@ func (s *service) GetProducts(category string) ([]models.Product, error) {
 	return s.repositories.GetProducts(category)
 }
 
+func (s *service) GetProductByID(ID int) (models.Product, error) {
+	data, err := s.repositories.GetProductByID(ID)
+	if err != nil {
+		return data, err
+	}
+	return data, nil
+}
+
 func (s *service) CreateProduct(input request.StoreProduct) (models.Product, error) {
 	newproduct := models.Product{}
 	newproduct.Name = input.Name
