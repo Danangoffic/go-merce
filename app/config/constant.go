@@ -2,6 +2,8 @@ package config
 
 // Setter
 const (
+	// DATABASE CONSTANTS
+
 	// Set the Database Username
 	UserDB string = "root"
 	// Set the Database Password
@@ -16,6 +18,15 @@ const (
 	DBName string = "ecommerce_go"
 	// Set the Database optional Extra
 	DBOptionExtra string = "charset=utf8mb4&parseTime=True&loc=Local"
+
+	// ROUTES CONSTANTS
+
+	//set Allow methods in routes cors config
+	AllowMethods = "POST,GET,PUT,DELETE"
+	// Set allow headers in routes cors config
+	AllowHeaders = "Origin"
+	// Set to allow exposing headers in routes cors config
+	ExposeHeaders = "Content-Length"
 )
 
 // Getter
