@@ -13,12 +13,14 @@ type RouterStruct struct {
 	DB *gorm.DB
 }
 
+// LoadRouters function will load all Application routes and pass the mapper as RouterStruct in Application bootstrap
 func LoadRouters(mapper RouterStruct) {
-	repos := populateRepository(mapper.DB)
+	// populate the repositories
+	populateRepos := populateRepository(mapper.DB)
 	// userService :=
-	service := ServiceApp.InitService(repos.productRepo)
-	pc := controllers.NewProductController(mapper.DB, service)
-	userControler := controllers.NewUserController(mapper.DB, service)
+	service := ServiceApp.InitService(populateRepos.repos)
+	pc := controllers.NewProductController(service)
+	userControler := controllers.NewUserController(service)
 
 	//
 	productRoutes := mapper.GE.Group("/products")
@@ -30,10 +32,11 @@ func LoadRouters(mapper RouterStruct) {
 }
 
 type RepositoryList struct {
-	productRepo Repositories.Repository
+	repos Repositories.Repository
 }
 
+// populateRepository function will populate all the repositories that belong to the application
 func populateRepository(db *gorm.DB) RepositoryList {
-	productRepo := Repositories.GetRepository(db)
-	return RepositoryList{productRepo: productRepo}
+	repos := Repositories.GetRepository(db)
+	return RepositoryList{repos: repos}
 }
