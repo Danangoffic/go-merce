@@ -3,7 +3,6 @@ package config
 import (
 	"time"
 
-	"github.com/Danangoffic/go-merce/app/database"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -20,19 +19,14 @@ func InitDB() *gorm.DB {
 	sqlDB, err := db.DB()
 
 	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
-	sqlDB.SetMaxIdleConns(10)
+	sqlDB.SetMaxIdleConns(50)
 
 	// SetMaxOpenConns sets the maximum number of open connections to the database.
-	sqlDB.SetMaxOpenConns(1000)
+	sqlDB.SetMaxOpenConns(100)
 
 	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
-	// Auto migrate tabel, wait the progress until done with goroutine
-	go database.Migrate(db)
-
-	//database seeder
-	database.SeedDB(db)
 	return db
 }
 

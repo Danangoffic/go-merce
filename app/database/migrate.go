@@ -7,5 +7,5 @@ import (
 
 // Run the database migration
 func Migrate(db *gorm.DB) {
-	go migrations.DoMigration(db)
+	migrations.DoMigration(db)
 }

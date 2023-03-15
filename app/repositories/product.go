@@ -2,13 +2,20 @@ package repositories
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/Danangoffic/go-merce/app/models"
 )
 
 func (p *RepositoryApp) GetProducts(category string) ([]models.Product, error) {
 	var products []models.Product
-	if err := p.db.Find(&products).Order("ID DESC").Error; err != nil {
+	query := p.db.Preload("CreatedBy").Preload("ProductImages").Order("ID DESC")
+	if category != "" {
+		fmt.Printf("category ada : %v", category)
+		query.Where("type = ?", category)
+	}
+	fmt.Printf("query generated : %v\n", query)
+	if err := query.Find(&products).Error; err != nil {
 		return nil, err
 	}
 

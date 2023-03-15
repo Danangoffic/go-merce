@@ -32,5 +32,5 @@ const (
 // Getter
 const (
 	// Get the DSN Database Configuration, it will return as a String. Just Change The Setter!
-	DSN string = UserDB + ":" + PassDB + "@" + PortDB + "(" + HostDB + ":" + PortDB + ")/" + DBName + "?" + DBOptionExtra
+	DSN string = UserDB + ":" + PassDB + "@" + ConnectionDB + "(" + HostDB + ":" + PortDB + ")/" + DBName + "?" + DBOptionExtra
 )

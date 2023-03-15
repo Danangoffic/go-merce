@@ -2,6 +2,7 @@ package API
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -27,6 +28,7 @@ func (pc *ProductController) GetProducts(c *gin.Context) {
 
 	// Query semua produk
 	category, _ := c.GetQuery("category")
+	fmt.Printf("param query category : %v\n", category)
 	products, err := pc.Service.GetProducts(category)
 	if err != nil {
 		response := helpers.ResponseJSON(err.Error(), http.StatusNotFound, nil, err)
