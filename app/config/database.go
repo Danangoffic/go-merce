@@ -1,10 +1,16 @@
 package config
 
 import (
+	"context"
+	"fmt"
+	"log"
 	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // InitDB function will initialize the database, run the migration table, seed the database if needed
@@ -40,4 +46,37 @@ func setupDatabase() (*gorm.DB, error) {
 		return nil, err
 	}
 	return db, nil
+}
+
+// MongoConnection func will connect to mongo database using no-sql mongo driver
+// and return the *mongo.client object to interacts with mongo database and collections
+func MongoConnection() *mongo.Client {
+	client, _ := connectWithMongoDB()
+	return client
+}
+
+func connectWithMongoDB() (*mongo.Client, error) {
+	// stringConnectionMongo := "mongodb+srv://danangoffic:kabeldata95@clusterdanang.hldbrfi.mongodb.net/?retryWrites=true&w=majority"
+	fmt.Printf("string connection to : %v\n", MongoDBURL)
+
+	// set server API options to mongodb
+	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
+	clientOptions := options.Client().
+		ApplyURI(MongoDBURL).
+		SetServerAPIOptions(serverAPIOptions)
+
+	// set context logging
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+
+	// to cancel if meet timeout
+	// defer cancel()
+
+	// to connect mongo db with clientOptions
+	client, err := mongo.Connect(ctx, clientOptions)
+	if err != nil {
+		log.Fatal(err)
+		panic("failed to connect with mongo db with : " + err.Error())
+	}
+
+	return client, nil
 }
