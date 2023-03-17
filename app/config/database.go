@@ -56,7 +56,6 @@ func MongoConnection() *mongo.Client {
 }
 
 func connectWithMongoDB() (*mongo.Client, error) {
-	// stringConnectionMongo := "mongodb+srv://danangoffic:kabeldata95@clusterdanang.hldbrfi.mongodb.net/?retryWrites=true&w=majority"
 	fmt.Printf("string connection to : %v\n", MongoDBURL)
 
 	// set server API options to mongodb
