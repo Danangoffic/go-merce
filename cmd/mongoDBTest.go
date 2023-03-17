@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/Danangoffic/go-merce/app/config"
+	mongoModel "github.com/Danangoffic/go-merce/app/models/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -27,10 +28,21 @@ func main() {
 
 	// sample data to store a data to mongo db using bson.D interfaces
 	docs := []interface{}{
-		bson.D{
-			{"title", "PUBGM-VOUCHER-100"}, {"price", 100000}, {"type", "PUBG"}},
-		bson.D{{"title", "PUBGM-VOUCHER-150"}, {"price", 150000}, {"type", "PUBG"}},
-		bson.D{{"title", "PUBGM-VOUCHER-200"}, {"price", 200000}, {"type", "PUBG"}},
+		mongoModel.Vouchers{
+			Title: "PUBGM-VOUCHER-100",
+			Price: 100000,
+			Type:  "PUBG",
+		},
+		mongoModel.Vouchers{
+			Title: "PUBGM-VOUCHER-150",
+			Price: 150000,
+			Type:  "PUBG",
+		},
+		mongoModel.Vouchers{
+			Title: "PUBGM-VOUCHER-200",
+			Price: 2000000,
+			Type:  "PUBG",
+		},
 	}
 
 	// sample to insert many data on vouchers collection in v_commerce database
@@ -46,7 +58,7 @@ func main() {
 	}
 
 	// set collection data to fetchData mapper as []bson.M
-	var fetchData []bson.M
+	var fetchData []mongoModel.Vouchers
 	if err = allVouchersCollection.All(ctx, &fetchData); err != nil {
 		panic("Failed to get all vouchers collection")
 	}
